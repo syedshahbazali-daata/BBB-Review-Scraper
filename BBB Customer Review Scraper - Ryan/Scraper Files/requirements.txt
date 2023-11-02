@@ -1,0 +1,2 @@
+undetected-chromedriver==3.5.3
+art==6.1
