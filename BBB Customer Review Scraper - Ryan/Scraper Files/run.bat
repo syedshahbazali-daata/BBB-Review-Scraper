@@ -1,1 +1,0 @@
-python Scrapyer.py
