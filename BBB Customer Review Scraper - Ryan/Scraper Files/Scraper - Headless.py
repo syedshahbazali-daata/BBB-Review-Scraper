@@ -30,7 +30,7 @@ all_reviews_data = []
 
 
 def days_until_date(input_date):
-    date_format = "%d-%m-%Y"
+    date_format = "%m-%d-%Y"
 
     try:
         input_datetime = datetime.strptime(input_date, date_format)
@@ -52,7 +52,7 @@ while keep_running:
     page_url = f'https://www.bbb.org/api/businessprofile/customerreviews?page={page}&pageSize={page_size}&businessId={business_Id}&bbbId={bbb_id}&sort=reviewDate%20desc,%20id%20desc'
 
     res = session.get(page_url)
-    print(res.text)
+    # print(res.text)
 
     try:
         json_result = res.json()
@@ -67,14 +67,19 @@ while keep_running:
     for item in items:
         review_stars = item['reviewStarRating']
         user_name = item['displayName']
-        date = f"{item['date']['day']}-{item['date']['month']}-{item['date']['year']}"
+        date = f"{item['date']['month']}-{item['date']['day']}-{item['date']['year']}"
         details = item['text']
+        if details is None:
+            try:
+                details = item['extendedText'][0]['text']
+            except:
+                details = ""
 
         data = {
             'User': user_name,
             'Stars': review_stars,
             'Date': date,
-            'Source_url': page_url,
+            'Source_url': url + "/customer-reviews",
             'Details': details
         }
 
